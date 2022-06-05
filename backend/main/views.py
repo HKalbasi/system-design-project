@@ -2,7 +2,9 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, views
 from rest_framework import permissions
 from backend.main.serializers import UserSerializer, GroupSerializer
+from .serializers import RegisterSerializer
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 
 class CurrentUserView(views.APIView):
@@ -19,6 +21,10 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    @action(detail=True, methods=['post'])
+    def create_user(self, request, pk=None):
+        pass
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
@@ -27,3 +33,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class RegisterViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = RegisterSerializer
